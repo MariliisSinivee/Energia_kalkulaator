@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css" media="screen"/>
+
+
+<body>
+  <header class="header">     
+      <h1>Kuumaksete kalkulaator</h1>     
+  </header>
+
+  <div class="p">Teenus:</div>
+
+  <div class="container">
+    <div class="item">
+      <input type="checkbox" id="paike">
+       <p class="p">
+         <p1>
+          Päikesepaneelid
+         </p1>
+        </p>
+  </div>
+  <div class="item">
+    <input type="checkbox" id="soojus">
+     <p class="p">
+       <p1>
+        Soojuspump
+       </p1>
+      </p>
+</div>
+<div class="item">
+  <input type="checkbox"id="elekter">
+   <p class="p">
+     <p1>
+      Elektritööd või gaasitööd
+     </p1>
+    </p>
+</div>
+<div class="item">
+  <input type="checkbox" id="off">
+   <p class="p">
+     <p1>
+      Off-Grid võrguvaba elekter
+     </p1>
+    </p>
+</div>
+<div class="item">
+  <input type="checkbox" id="auto">
+   <p class="p">
+     <p1>
+      Elektriautode laadimislahendus
+     </p1>
+    </p>
+</div>
+  </div>
+<div class="p">Summa:</div>
+</div>
+<div class="range-wrap"> 
+  <div class="range-value" id="rangeV"></div>
+  <input id="range" type="range" min="300" max="25000" value="200" step="1">
+  <span>300 eur</span>
+  <span style="margin-left: 400px;">25000</span>
+</div>
+<div class="p">Periood*:</div>
+<div class="custom-select-wrapper">
+  <div class="custom-select">
+    <div class="custom-options" id="monthV"></div>
+      <div class="custom-select__trigger" ><span></span>
+          <div class="arrow"></div>
+      </div>              
+      </div>
+  </div>
+</div>
+
+<div class="p2">Sissemakse*:</div>
+<input type="number" id="credit">
+</body>
+
+<body class="body">
+<div class="p"> Täismaksumus-esmane sissemakse:
+  <input type="text" id="krediidimaksumus"/>
+</div>
+
+ <div class="p">Intress:
+  <input type="text" id="intress"/>
+ </div>
+
+ <div class="p">Teenustasu:
+  <input type="text" id="teenustasu"/> 
+ </div>
+  
+ <div class="p">Haldustasu:
+  <input type="text" id="haldustasu"/>
+ </div>
+  
+ <div class="p">Periood:
+  <input type="text" id="periood1"/>
+ </div>
+  
+</div>
+<br></br>
+<div>
+<td><input type="button" value="Esita taotlus" onclick="calculate()"/> </td> </div>
+</body>
+
+<script>
+
+  
+const
+  range = document.getElementById('range'),
+  rangeV = document.getElementById('rangeV'),
+  setValue = ()=>{
+    const
+      newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ),
+      newPosition = 10 - (newValue * 0.2);
+    rangeV.innerHTML = `<span>${range.value + ' eur'} </span>`;
+    rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+  };
+document.addEventListener("DOMContentLoaded", setValue);
+range.addEventListener('input', setValue);
+
+document.querySelector('.custom-select-wrapper').addEventListener('click', function() {
+    this.querySelector('.custom-select').classList.toggle('open');
+})
+for (const option of document.querySelectorAll(".custom-option")) {
+    option.addEventListener('click', function() {
+        if (!this.classList.contains('selected')) {
+            this.parentNode.querySelector('.custom-option.selected').classList.remove('selected');
+            this.classList.add('selected');
+            this.closest('.custom-select').querySelector('.custom-select__trigger span').textContent = this.textContent;
+        }
+    })
+}           
+         function calculate() 
+         { 
+          let x = document.getElementById("range").value 
+             let y = document.getElementById("credit").value 
+             let sum = x-y
+             document.getElementById("krediidimaksumus").value = sum
+
+          var checkBox1 = document.getElementById("paike");
+          var checkBox4 = document.getElementById("off");
+
+           if(checkBox1.checked == true || checkBox4.checked == true){
+            document.getElementById("intress").value = 7.9 
+            document.getElementById("teenustasu").value = 50
+            document.getElementById("haldustasu").value = 1
+            document.getElementById("periood1").value = document.getElementById("month").value
+           }
+           var checkBox2 = document.getElementById("soojus");
+           if(checkBox2.checked == true){
+             if(sum>=300 & sum<=1990){
+            document.getElementById("intress").value = 7.9 
+            document.getElementById("teenustasu").value = 30
+          }
+          if(sum>=2000 & sum<=5999){
+            document.getElementById("intress").value = 6.5 
+            document.getElementById("teenustasu").value = 20
+          }
+          if(sum>=6000 & sum<=25000){
+            document.getElementById("intress").value = 5.9 
+            document.getElementById("teenustasu").value = 20
+          }
+            document.getElementById("haldustasu").value = 1
+            document.getElementById("periood1").value = document.getElementById("month").value
+           }
+
+           var checkBox3 = document.getElementById("elekter");
+           if(checkBox3.checked == true){
+             if(sum>=300 & sum<=999){
+                document.getElementById("intress").value = 9.9 
+                document.getElementById("teenustasu").value = 30
+                document.getElementById("haldustasu").value = 1
+              }
+              if(sum>=1000 & sum<=1999){
+                document.getElementById("intress").value = 8.9 
+                document.getElementById("haldustasu").value = 1
+                
+              }
+              if(sum>=2000 & sum<=5999){
+                document.getElementById("intress").value = 7.5 
+                document.getElementById("haldustasu").value = 0
+               
+              }
+              if(sum>=6000 & sum<=25000){
+                document.getElementById("intress").value = 6.9 
+                document.getElementById("haldustasu").value = 0
+               
+              }
+              document.getElementById("teenustasu").value = 20
+            
+            document.getElementById("periood1").value = document.getElementById("month").value
+           }
+           
+           if(checkBox4.checked == true){            
+            document.getElementById("haldustasu").value = 0
+           }
+
+           var checkBox5 = document.getElementById("auto");
+          if(checkBox5.checked == true){
+             if(sum>=300 & sum<=1990){
+                document.getElementById("intress").value = 5.9 
+                document.getElementById("teenustasu").value = 50
+              }
+              if(sum>=2000 & sum<=5999){
+                document.getElementById("intress").value = 4.5 
+                document.getElementById("teenustasu").value = 40
+              }
+              if(sum>=6000 & sum<=25000){
+                document.getElementById("intress").value = 3.9 
+                document.getElementById("teenustasu").value = 30
+              }
+            
+            document.getElementById("haldustasu").value = 2
+            document.getElementById("periood1").value = document.getElementById("month").value
+           }
+         function getMonths(){
+         
+         for(i=0; i>=120; i+6){
+          monthV.innerHTML = `<option>${i + ' kuud'} </option>`;
+
+          }
+         }
+          
+             
+         } 
+  </script>
+</body>
+</head>
+</html>
